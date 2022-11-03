@@ -1,0 +1,61 @@
+-- Validacao
+
+Os objetivos do banco sao {
+
+  - Vender Pacotes (Tabela purchase. Relacao entre customer, purchase e package.)
+     1- Saber a quantidade de cursos e a receita total vendida
+
+SELECT COUNT(pu.id) AS qntd, SUM(pa.cost) AS amount
+FROM package pa, purchase pu
+WHERE pa.id = pu.package_id;
+
+     2- Saber quanto de cada pacote foi vendido e a receita de cada
+
+SELECT pa.title, COUNT(pu.id) AS qntd, SUM(pa.cost) AS amount
+FROM package pa, purchase pu
+WHERE pa.id = pu.package_id
+GROUP BY pa.title;
+
+
+
+  - Organizar o registro dos alunos em aulas
+     3- Saber quantos alunos se registraram em cada aula 
+
+SELECT c.id, c.title, COUNT(rg.id) AS qntd
+FROM class c, registration rg
+WHERE c.id = rg.class_id
+GROUP BY c.id, c.title;
+
+     4- Saber quantos alunos se registraram por tipo da aula
+  
+SELECT ct.title, COUNT(rg.id) AS qntd
+FROM class_type ct, class c, registration rg
+WHERE ct.id = c.class_type_id AND c.id = rg.class_id
+GROUP BY ct.title;
+
+     5- Saber quantos alunos se registraram por tipo da aula e especializacao
+
+SELECT ct.title, ct.specialty, COUNT(rg.id) AS qntd
+FROM class_type ct, class c, registration rg
+WHERE ct.id = c.class_type_id AND c.id = rg.class_id
+GROUP BY ct.id, ct.title, ct.specialty;
+
+
+
+  - Organizar a reserva de sala e veiculos
+     6- Saber em ordem quantas vezes foi reservado um tipo de carro
+
+SELECT v.type, COUNT(rs.id) AS qntd
+FROM vehicles v, reservation rs
+WHERE v.id = rs.vehicles_id
+GROUP BY v.type
+ORDER BY qntd DESC;
+
+      7- Um aluno rabiscou Bolsonaro2022 na carteira da sala de id 01, quero saber quais alunos tiveram aula nessa sala
+
+SELECT DISTINCT cu.name
+FROM customer cu, registration rg, class c, reservation rs, rooms r
+WHERE cu.id = rg.customer_id AND c.id = rg.class_id AND c.id = rs.class_id AND r.id = rs.rooms_id AND r.id = 1;
+
+}
+
